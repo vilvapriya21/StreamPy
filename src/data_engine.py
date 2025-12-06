@@ -60,20 +60,19 @@ def fetch_premium_users():
     Select all users on the 'Premium' plan.
     (Assumes a 'users' table exists with column 'plan')
     """
-    conn = sqlite3.connect("streampy.db")
-    cur = conn.cursor()
+    with sqlite3.connect("streampy.db") as conn:
+        cur = conn.cursor()
 
-    cur.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER, name TEXT, plan TEXT)")
-    cur.execute("INSERT INTO users VALUES (1, 'Alice', 'Premium')")
-    cur.execute("INSERT INTO users VALUES (2, 'Bob', 'Basic')")
-    cur.execute("INSERT INTO users VALUES (3, 'Charlie', 'Premium')")
-    conn.commit()
+        cur.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER, name TEXT, plan TEXT)")
+        cur.execute("INSERT INTO users VALUES (1, 'Alice', 'Premium')")
+        cur.execute("INSERT INTO users VALUES (2, 'Bob', 'Basic')")
+        cur.execute("INSERT INTO users VALUES (3, 'Charlie', 'Premium')")
+        conn.commit()
 
-    cur.execute("SELECT * FROM users WHERE plan='Premium'")
-    result = cur.fetchall()
+        cur.execute("SELECT * FROM users WHERE plan='Premium'")
+        result = cur.fetchall()
 
-    conn.close()
-    return result
+        return result
 
 
 # -------------------------------
