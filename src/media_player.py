@@ -1,95 +1,107 @@
 """
 media_player.py
 -----------------
-This module demonstrates advanced OOP concepts for the StreamPy platform.
+Core media playback logic for StreamPy.
 
-Features included:
-- Inheritance using a parent class `Content`
-- Polymorphism using the `play()` method in `Movie` and `Series`
-- Encapsulation with a protected attribute `_stream_key`
-- Magic Method: __repr__ for developer-friendly object representation
+Demonstrates:
+- Inheritance via parent class `Content`
+- Polymorphism with `play()` in Movie and Series
+- Encapsulation using protected attribute `_stream_key`
+- Magic methods for developer-friendly object representation
+- Input validation and basic edge case handling
 """
+
+from typing import Optional
 
 
 class Content:
     """
-    Parent class for all types of content in StreamPy.
-    Holds basic information such as content ID, title, and a protected stream key.
+    Base class for all media content.
+
+    Attributes:
+        content_id: Unique ID for the content
+        title: Name of the content
+        _stream_key: Protected attribute for streaming access
     """
 
-    def __init__(self, content_id: int, title: str):
-        """
-        Initialize a Content object.
+    def __init__(self, content_id: int, title: str) -> None:
+        """Initialize content with ID and title; validate inputs."""
+        if not isinstance(content_id, int):
+            raise TypeError("content_id must be an integer")
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError("title must be a non-empty string")
 
-        Args:
-            content_id (int): Unique ID for the content.
-            title (str): Title of the content.
-        """
-        self.content_id = content_id
-        self.title = title
-        self._stream_key = None  # Protected attribute
+        self.content_id: int = content_id
+        self.title: str = title
+        self._stream_key: Optional[str] = None  # Protected
 
     def set_stream_key(self, key: str) -> None:
-        """
-        Set the protected stream key.
-
-        Args:
-            key (str): The stream key to assign.
-
-        Notes:
-            A simple type check is included as a basic validation step.
-        """
-        if not isinstance(key, str):
-            raise TypeError("Stream key must be a string.")
+        """Assign a stream key (must be a non-empty string)."""
+        if not isinstance(key, str) or not key.strip():
+            raise ValueError("Stream key must be a non-empty string")
         self._stream_key = key
 
     def get_stream_key(self) -> str:
-        """
-        Retrieve the protected stream key.
-
-        Returns:
-            str: The assigned stream key (or None if not set).
-        """
+        """Return the stream key; raise error if not set."""
+        if self._stream_key is None:
+            raise ValueError(f"Stream key for '{self.title}' not assigned")
         return self._stream_key
 
 
 class Movie(Content):
-    """
-    Represents a movie in the StreamPy platform.
-    Inherits from Content and overrides the play() method.
-    """
+    """Represents a movie with a play() method."""
 
     def play(self) -> None:
-        """Simulate playing a movie."""
-        print("Starting Film...")
+        """Play the movie if stream key is set; otherwise, warn."""
+        if self._stream_key is None:
+            print(f"Cannot play '{self.title}': stream key not set")
+        else:
+            print("Starting Film...")
 
     def __repr__(self) -> str:
-        """Return developer-friendly string representation."""
+        """Developer-friendly representation."""
         return f"Movie(id={self.content_id}, title='{self.title}')"
 
 
 class Series(Content):
-    """
-    Represents a TV series in the StreamPy platform.
-    Inherits from Content and overrides the play() method.
-    """
+    """Represents a TV series with a play() method."""
 
-    def play(self) -> None:
-        """Simulate playing a series episode."""
-        print("Resuming S01E01...")
+    def play(self, episode: int = 1) -> None:
+        """Play a specific episode if stream key is set; validate episode."""
+        if not isinstance(episode, int) or episode < 1:
+            print(f"Invalid episode number for '{self.title}'")
+            return
+
+        if self._stream_key is None:
+            print(f"Cannot play '{self.title}': stream key not set")
+        else:
+            print(f"Resuming S01E{episode:02d}...")
 
     def __repr__(self) -> str:
-        """Return developer-friendly string representation."""
+        """Developer-friendly representation."""
         return f"Series(id={self.content_id}, title='{self.title}')"
 
 
-# Demo section
+# Demo
 if __name__ == "__main__":
-    m = Movie(101, "Interstellar")
-    s = Series(201, "Stranger Things")
+    movie = Movie(101, "Interstellar")
+    series = Series(201, "Stranger Things")
 
-    print(m)
-    print(s)
+    print(movie)
+    print(series)
 
-    m.play()
-    s.play()
+    # Play without stream key
+    movie.play()
+    series.play()
+
+    # Set stream keys
+    movie.set_stream_key("abc123xyz")
+    series.set_stream_key("serieskey456")
+
+    # Play with stream keys
+    movie.play()
+    series.play(2)
+
+    # Access stream keys
+    print("Movie Stream Key:", movie.get_stream_key())
+    print("Series Stream Key:", series.get_stream_key())
