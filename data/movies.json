@@ -1,0 +1,8 @@
+[
+  {"title": "Interstellar", "genre": "Sci-Fi", "rating": "PG-13", "duration": 169},
+  {"title": "Finding Nemo", "genre": "Animation", "rating": "G", "duration": 100},
+  {"title": "The Conjuring", "genre": "Horror", "rating": "R", "duration": 112},
+  {"title": "Avengers", "genre": "Action", "rating": "PG-13", "duration": 143},
+  {"title": "Toy Story", "genre": "Animation", "rating": "G", "duration": 81},
+  {"title": "Toy Story 2", "genre": "Animation", "rating": "", "duration": 81}
+]

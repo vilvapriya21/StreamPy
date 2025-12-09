@@ -33,7 +33,7 @@ class Content:
 
         self.content_id: int = content_id
         self.title: str = title
-        self._stream_key: Optional[str] = None  # Protected
+        self._stream_key: Optional[str] = None  
 
     def set_stream_key(self, key: str) -> None:
         """Assign a stream key (must be a non-empty string)."""

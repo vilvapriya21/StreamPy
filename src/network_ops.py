@@ -17,17 +17,13 @@ import requests
 import zipfile
 
 
-# ------------------------------------
 # 1. Custom Exception
-# ------------------------------------
 class RegionBlockError(Exception):
     """Raised when a user tries to access blocked content."""
     pass
 
 
-# ------------------------------------
 # 2. Web Request: POST error report
-# ------------------------------------
 def report_error(msg: str):
     """
     Sends an error message to a server using a POST request.
@@ -40,9 +36,7 @@ def report_error(msg: str):
         print(f"Request failed: {e}")
 
 
-# ------------------------------------
 # 3. CSV Reading: Print first 5 usernames
-# ------------------------------------
 def read_usernames():
     """
     Reads data/users.csv and prints the first 5 usernames.
@@ -64,9 +58,7 @@ def read_usernames():
                 break
 
 
-# ------------------------------------
 # 4. OS & ZIP Operations
-# ------------------------------------
 def manage_cache_and_logs():
     """
     - Ensure 'cache/' folder exists.
@@ -94,9 +86,7 @@ def manage_cache_and_logs():
         print("[Logs] No logs folder found, skipping archiving.")
 
 
-# ------------------------------------
 # 5. Region Block Demo Function
-# ------------------------------------
 def access_content(country: str):
     """
     Raises RegionBlockError for restricted regions.
@@ -109,10 +99,7 @@ def access_content(country: str):
 
     print(f"Content streamed successfully for region: {country}")
 
-
-# ------------------------------------
-# Demo Usage
-# ------------------------------------
+#demo
 if __name__ == "__main__":
     report_error("Service not found error")
     read_usernames()
