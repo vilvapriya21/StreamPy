@@ -6,7 +6,7 @@ Core media playback logic for StreamPy.
 Demonstrates:
 - Inheritance via parent class `Content`
 - Polymorphism with `play()` in Movie and Series
-- Encapsulation using protected attribute `_stream_key`
+- Encapsulation using protected attribute `_stream_key` with property
 - Magic methods for developer-friendly object representation
 - Input validation and basic edge case handling
 """
@@ -35,17 +35,20 @@ class Content:
         self.title: str = title
         self._stream_key: Optional[str] = None  
 
-    def set_stream_key(self, key: str) -> None:
-        """Assign a stream key (must be a non-empty string)."""
-        if not isinstance(key, str) or not key.strip():
-            raise ValueError("Stream key must be a non-empty string")
-        self._stream_key = key
 
-    def get_stream_key(self) -> str:
-        """Return the stream key; raise error if not set."""
+    @property
+    def stream_key(self) -> str:
+        """Get the stream key; raise error if not set."""
         if self._stream_key is None:
             raise ValueError(f"Stream key for '{self.title}' not assigned")
         return self._stream_key
+
+    @stream_key.setter
+    def stream_key(self, key: str) -> None:
+        """Set the stream key (must be a non-empty string)."""
+        if not isinstance(key, str) or not key.strip():
+            raise ValueError("Stream key must be a non-empty string")
+        self._stream_key = key
 
 
 class Movie(Content):
@@ -94,14 +97,14 @@ if __name__ == "__main__":
     movie.play()
     series.play()
 
-    # Set stream keys
-    movie.set_stream_key("abc123xyz")
-    series.set_stream_key("serieskey456")
+    # Set stream keys (using property)
+    movie.stream_key = "abc123xyz"
+    series.stream_key = "serieskey456"
 
     # Play with stream keys
     movie.play()
     series.play(2)
 
-    # Access stream keys
-    print("Movie Stream Key:", movie.get_stream_key())
-    print("Series Stream Key:", series.get_stream_key())
+    # Access stream keys (using property)
+    print("Movie Stream Key:", movie.stream_key)
+    print("Series Stream Key:", series.stream_key)
